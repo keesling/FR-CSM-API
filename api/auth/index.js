@@ -3,6 +3,7 @@ const axios = require('axios');
 module.exports = async function (context, req) {
   const username = process.env.HIGHSPOT_USERID;
   const password = process.env.HIGHSPOT_PWD;
+  const token = process.env.HIGHSPOT_TOKEN;
 
   if (!username || !password) {
     context.log.error('Missing Highspot credentials');
@@ -14,7 +15,7 @@ module.exports = async function (context, req) {
     return;
   }
 
-  const authHeader = 'Basic ' + Buffer.from(`${username}:${password}`).toString('base64');
+  const authHeader = 'Basic ' + Buffer.from(`${username}:${password}:$(token)'.toString('base64');
 
   try {
     const res = await axios.get('https://api.highspot.com/v1.0/users/me', {
