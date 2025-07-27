@@ -8,10 +8,11 @@ module.exports = async function (context, req) {
     context.log('Missing Highspot credentials');
     context.res = {
       status: 500,
-      body: {
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
         success: false,
         message: 'Missing Highspot credentials',
-      },
+      }),
     };
     return;
   }
@@ -28,23 +29,25 @@ module.exports = async function (context, req) {
 
     context.res = {
       status: 200,
-      body: {
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
         success: true,
         count: res.data.objects?.length || 0,
         data: res.data.objects || [],
-      },
+      }),
     };
   } catch (err) {
     context.log('Error calling Highspot API:', err);
 
     context.res = {
       status: err.response?.status || 500,
-      body: {
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
         success: false,
         message: err.message,
         error: err.response?.data || 'No response data',
         headers: err.response?.headers || 'No headers',
-      },
+      }),
     };
   }
 };
