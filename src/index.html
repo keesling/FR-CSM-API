@@ -1,52 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Highspot Auth Test</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 40px;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-    }
-    #result {
-      margin-top: 20px;
-      font-weight: bold;
-    }
+    body { font-family: Arial, sans-serif; margin: 2em; }
+    button { padding: 0.5em 1em; font-size: 1em; }
+    #result { margin-top: 1em; white-space: pre-wrap; }
   </style>
 </head>
 <body>
-
-  <h1>Highspot Authentication</h1>
-  <button id="authBtn">Test Highspot Auth</button>
-  <p id="result"></p>
+  <h1>Highspot API Authentication</h1>
+  <button id="fetchBtn">Fetch User Info</button>
+  <div id="result"></div>
 
   <script>
-  document.getElementById('authBtn').addEventListener('click', async () => {
-    const resultText = document.getElementById('result');
-    resultText.textContent = '⏳ Authenticating...';
+    document.getElementById('fetchBtn').addEventListener('click', () => {
+      const resultDiv = document.getElementById('result');
+      resultDiv.textContent = 'Loading...';
 
-    try {
-      const response = await fetch('/api/auth');
-      const data = await response.json();
-
-      console.log('Response:', response);
-      console.log('Data:', data);
-
-      if (response.ok && data.success) {
-        resultText.textContent = `✅ Authentication successful.\nSpot count: ${data.count}`;
-      } else {
-        resultText.textContent = `❌ Failed:\n${JSON.stringify(data, null, 2)}`;
-      }
-    } catch (err) {
-      console.error('Network error:', err);
-      resultText.textContent = `❌ Network error:\n${err.message}`;
-    }
-  });
-</script>
-
+      fetch('/api/auth')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.text();
+        })
+        .then(text => {
+          const data = text ? JSON.parse(text) : {};
+          resultDiv.textContent = JSON.stringify(data, null, 2);
+        })
+        .catch(error => {
+          resultDiv.textContent = 'Error: ' + error.message;
+        });
+    });
+  </script>
 </body>
 </html>
