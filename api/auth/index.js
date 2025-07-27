@@ -1,3 +1,7 @@
+
+const axios = require('axios');
+
+
 module.exports = async function (context, req) {
   context.log('Simple Azure Function triggered');
 
