@@ -25,24 +25,28 @@
   <p id="result"></p>
 
   <script>
-    document.getElementById('authBtn').addEventListener('click', async () => {
-      const resultText = document.getElementById('result');
-      resultText.textContent = '⏳ Authenticating...';
+  document.getElementById('authBtn').addEventListener('click', async () => {
+    const resultText = document.getElementById('result');
+    resultText.textContent = '⏳ Authenticating...';
 
-      try {
-        const response = await fetch('/api/auth?input');
-        const data = await response.json();
+    try {
+      const response = await fetch('/api/auth');
+      const data = await response.json();
 
-        if (response.ok && data.success) {
-          resultText.textContent = `✅ Authentication successful. Spot count: ${data.count}`;
-        } else {
-          resultText.textContent = `❌ Failed: ${data.error || response.statusText}`;
-        }
-      } catch (err) {
-        resultText.textContent = `❌ Network error: ${err.message}`;
+      console.log('Response:', response);
+      console.log('Data:', data);
+
+      if (response.ok && data.success) {
+        resultText.textContent = `✅ Authentication successful.\nSpot count: ${data.count}`;
+      } else {
+        resultText.textContent = `❌ Failed:\n${JSON.stringify(data, null, 2)}`;
       }
-    });
-  </script>
+    } catch (err) {
+      console.error('Network error:', err);
+      resultText.textContent = `❌ Network error:\n${err.message}`;
+    }
+  });
+</script>
 
 </body>
 </html>
