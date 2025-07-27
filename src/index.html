@@ -1,0 +1,21 @@
+/<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Azure Static Web App</title>
+</head>
+<body>
+  <h1>Welcome to Azure Static Web App</h1>
+  <button id="fetchData">Fetch API Data</button>
+  <p id="apiResponse"></p>
+
+  <script>
+    document.getElementById('fetchData').addEventListener('click', async () => {
+      const response = await fetch('/api/HttpExample?name=Azure');
+      const data = await response.json();
+      document.getElementById('apiResponse').textContent = data.message;
+    });
+  </script>
+</body>
+</html>
